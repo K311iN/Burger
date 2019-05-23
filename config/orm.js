@@ -1,6 +1,6 @@
 const connection = require('./connection.js');
 
-const printQuestionMarks = (num) => {
+const printQuestionMarks = function (num) {
   let arr = [];
   for (let i = 0; i < num; i++) {
     arr.push('?');
@@ -8,7 +8,7 @@ const printQuestionMarks = (num) => {
   return arr.toString();
 };
 
-const objToSql = (object) => {
+const objToSql = function (object) {
   let arr = [];
   for (let key in object) {
     let value = object[key];
@@ -23,14 +23,14 @@ const objToSql = (object) => {
 };
 
 const orm = {
-  selectAll: (tableName, cb) => {
+  selectAll: function (tableName, cb) {
     let queryString = `SELECT * FROM ${tableName};`;
     connection.query(queryString, (err, res) => {
       if (err) throw err;
       cb(res);
     });
   },
-  insertOne: (tableName, columnNames, columnValues, cb) => {
+  insertOne: function (tableName, columnNames, columnValues, cb) {
     let columnNameSting = columnNames.toString();
     let questionMarks = printQuestionMarks(columnValues.length);
     let queryString = `INSERT INTO ${tableName} (${columnNameSting}) VALUES (${questionMarks});`;
@@ -40,7 +40,7 @@ const orm = {
       cb(result);
     });
   },
-  updateOne: (tableName, objectColumnValues, condition, cb) => {
+  updateOne: function (tableName, objectColumnValues, condition, cb) {
     let objectToSQL = objToSql(objectColumnValues);
     let queryString = `UPDATE ${tableName} SET ${objectToSQL} WHERE ${condition};`;
     console.log(queryString);
@@ -49,7 +49,7 @@ const orm = {
       cb(result);
     });
   },
-  delete: (tableName, condition, cb) => {
+  delete: function (tableName, condition, cb) {
     let queryString = `DELETE FROM ${tableName} WHERE ${condition};`;
     connection.query(queryString, (err, result) => {
       if (err) throw err;

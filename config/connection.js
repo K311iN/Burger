@@ -7,14 +7,14 @@ if (process.env.JAWSDB_URL) {
 } else {
   connection = mysql.createConnection({
     host: 'localhost',
-    port: 3306,
+    port: 8080,
     user: 'root',
     password: 'Kb426259!',
-    database: 'burger_db'
+    database: 'burgers_db'
   });
 }
 
-connection.connect((err) => {
+connection.connect(function (err) {
   if (err) return console.error(`error connecting: ${err.stack}`);
   console.log(`connected as id ${connection.threadId}`);
 });

@@ -1,4 +1,4 @@
-$(() => {
+$(document).ready (function()  {
     $('.devourUndevour').on('click', function(event) {
       let toggleDevoured = {
         devoured: Math.abs($(this).data('devoured') - 1)
@@ -7,14 +7,14 @@ $(() => {
         type: 'PUT',
         data: toggleDevoured
       }).then(
-        () => {
+        function () {
           console.log(`Updated devoured state to ${toggleDevoured}`);
           location.reload();
         }
       );
     });
   
-    $('.burgerForm').on('submit', (event) => {
+    $('.burgerForm').on('submit', function (event) {
       event.preventDefault();
       let burger_name = $('#burger_name').val().trim();
       if (burger_name !== '') {
@@ -25,7 +25,7 @@ $(() => {
             devoured: $('[name=devoured]:checked').val()
           }
         }).then(
-          () => {
+          function() {
             console.log(`created new burger: ${burger_name}`);
             location.reload();
           }
@@ -38,7 +38,7 @@ $(() => {
       $.ajax("/api/delete-burger/" + id, {
         type: "DELETE"
       }).then(
-        () => {
+        function() {
           console.log("deleted burger", id);
           location.reload();
         }

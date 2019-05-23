@@ -4,30 +4,30 @@ let router = express.Router();
 
 let burger = require("../models/burger.js");
                                            
-router.get('/', (req, res) => {
-  burger.selectAll((data) => {
+router.get('/', function (req, res) {
+  burger.selectAll (function (data) {
     let handleBarsObject = { burgers: data };
     console.log(handleBarsObject);
     res.render("index", handleBarsObject);
   });
 });
 
-router.post('/api/new-burger', (req, res) => {
+router.post('/api/new-burger', function (req, res) {
   burger.insertOne([
     'burger_name', 'devoured'
   ], [
     req.body.burger_name, req.body.devoured
-  ], (result) => {
+  ], function (result) {
     res.json({ id: result.insertId });
   });
 });
 
-router.put('/api/update-burger/:id', (req, res) => {
+router.put('/api/update-burger/:id', function (req, res) {
   let condition = `id = ${req.params.id}`;
   console.log('condition', condition);
   burger.updateOne({
     devoured: req.body.devoured
-  }, condition, (result) => {
+  }, condition, function (result) {
     if (result.changedRows === 0) {
       return res.status(404).end();
     } else {
@@ -36,9 +36,9 @@ router.put('/api/update-burger/:id', (req, res) => {
   });
 });
 
-router.delete("/api/delete-burger/:id", (req, res) => {
+router.delete("/api/delete-burger/:id", function (req, res) {
   let condition = `id = ${req.params.id}`;
-  burger.delete(condition, (result) => {
+  burger.delete(condition, function (result) {
     if (result.affectedRows === 0) {
       return res.status(404).end();
     } else {
