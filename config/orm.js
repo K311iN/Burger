@@ -1,14 +1,15 @@
-const connection = require('./connection.js');
+const connection = require('../config/connection.js');
 
-const printQuestionMarks = function (num) {
+function printQuestionMarks(num) {
   let arr = [];
+  
   for (let i = 0; i < num; i++) {
     arr.push('?');
   }
   return arr.toString();
 };
 
-const objToSql = function (object) {
+objToSql = function (object) {
   let arr = [];
   for (let key in object) {
     let value = object[key];
@@ -23,39 +24,37 @@ const objToSql = function (object) {
 };
 
 const orm = {
-  selectAll: function (tableName, cb) {
-    let queryString = `SELECT * FROM ${tableName};`;
-    connection.query(queryString, (err, res) => {
-      if (err) throw err;
+  
+  selectAll: function (tableInput, cb) {
+    let queryString = "SELECT * FROM " + tableInput + ";";
+    connection.query(queryString, function (err, res) {
+      if (err) {
+        throw err;
+      }
       cb(res);
     });
   },
-  insertOne: function (tableName, columnNames, columnValues, cb) {
-    let columnNameSting = columnNames.toString();
-    let questionMarks = printQuestionMarks(columnValues.length);
-    let queryString = `INSERT INTO ${tableName} (${columnNameSting}) VALUES (${questionMarks});`;
+  
+  insertOne: function (burger_name, cb) {
+    let queryString = "Insert INTO burgers (burger_name) VALUES (?)";
     console.log(queryString);
-    connection.query(queryString, columnValues, (err, result) => {
-      if (err) throw err;
+    connection.query(queryString, [burger_name], function (err, result) {
+      if (err) {
+        throw err;
+      }
       cb(result);
     });
   },
-  updateOne: function (tableName, objectColumnValues, condition, cb) {
-    let objectToSQL = objToSql(objectColumnValues);
-    let queryString = `UPDATE ${tableName} SET ${objectToSQL} WHERE ${condition};`;
-    console.log(queryString);
-    connection.query(queryString, (err, result) => {
-      if (err) throw err;
+  
+  updateOne: function (table, condition, cb) {
+    let queryString = "UPDATE " + table + " SET devoured = true WHERE id = ?";
+    connection.query(queryString, [condition], function (err, res) {
+      if (err) {
+        throw err;
+      }
       cb(result);
     });
   },
-  delete: function (tableName, condition, cb) {
-    let queryString = `DELETE FROM ${tableName} WHERE ${condition};`;
-    connection.query(queryString, (err, result) => {
-      if (err) throw err;
-      cb(result);
-    });
-  }
 };
-
+ 
 module.exports = orm;
